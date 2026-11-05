@@ -25,4 +25,4 @@ export const saveNote = (note: Omit<Note, 'id' | 'createdAt'>): Note => {
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify([...notes, newNote]));
     return newNote;
-}
+};
