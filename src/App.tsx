@@ -1,12 +1,25 @@
+import { RouterProvider, createBrowserRouter } from "react-router";
+import { ThemeProvider } from './context/ThemeContext';
+import Layout from "./components/Layout";
 
 function App() {
-  
+
+  const router = createBrowserRouter([{
+    path: "/",
+    element: <Layout />,
+    children: [
+      {
+      }
+    ],
+  }
+  ]);
+
 
   return (
-    <>
-      <h1 className="text-red-500">Get started</h1>
-    </>
-  )
+    <ThemeProvider>
+      <RouterProvider router={router} />
+    </ThemeProvider>
+  );
 }
 
-export default App
+export default App;
