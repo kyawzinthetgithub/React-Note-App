@@ -29,7 +29,7 @@ function Dashboard() {
           filteredNotes.map((note) => (
             <Link
               key={note.id}
-              to={"/"}
+              to={`/note/${note.id}`}
               className="block relative p-5 border border-zinc-200 dark:border-zinc-800 rounded-xl hover:shadow-md transition-shadow"
             >
               <h2 className="text-lg font-semibold mb-2">{note.title}</h2>
@@ -59,6 +59,7 @@ function Dashboard() {
         ) : (
           <p>No notes available.</p>
         )}
+        {filteredNotes.length === 0 && <p>No notes found.</p>}
       </div>
     </div>
   );

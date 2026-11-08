@@ -3,6 +3,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import Layout from "./components/Layout";
 import Dashboard, { dashboardLoader } from "./pages/Dashboard";
 import CreateNote, { createNoteAction } from "./pages/CreateNote";
+import DetailNote from "./pages/DetailNote";
 
 function App() {
 
@@ -20,6 +21,10 @@ function App() {
         path: '/create-note',
         element: <CreateNote />,
         action: createNoteAction,
+      },
+      {
+        path:'/note/:id',
+        element: <DetailNote />
       }
     ],
   }
