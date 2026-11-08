@@ -2,7 +2,7 @@ import { RouterProvider, createBrowserRouter } from "react-router";
 import { ThemeProvider } from './context/ThemeContext';
 import Layout from "./components/Layout";
 import Dashboard, { dashboardLoader } from "./pages/Dashboard";
-import CreateNote from "./pages/CreateNote";
+import CreateNote, { createNoteAction } from "./pages/CreateNote";
 
 function App() {
 
@@ -18,7 +18,8 @@ function App() {
       },
       {
         path: '/create-note',
-        element: <CreateNote />
+        element: <CreateNote />,
+        action: createNoteAction,
       }
     ],
   }

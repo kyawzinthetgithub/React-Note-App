@@ -1,5 +1,16 @@
+/* eslint-disable react-refresh/only-export-components */
 import { useEffect, useRef } from "react";
-import { Form } from "react-router";
+import { Form, redirect, type ActionFunctionArgs } from "react-router";
+import { saveNote } from "../utils/storage";
+
+export const createNoteAction = async ({ request }: ActionFunctionArgs) => {
+    const formData = await request.formData();
+    const title = formData.get("title") as string;
+    const content = formData.get("content") as string;
+
+    saveNote({ title, content });
+    return redirect("/");
+  };
 
 function CreateNote() {
   const titleInputRef = useRef<HTMLLabelElement>(null);
@@ -14,7 +25,7 @@ function CreateNote() {
         create new note
       </h1>
 
-      <Form>
+      <Form method="post">
         <div>
           <div className="grid grid-cols-12 gap-4">
             <div className="col-span-2">

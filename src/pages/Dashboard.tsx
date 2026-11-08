@@ -5,28 +5,52 @@ import type { Note } from "../types";
 // The route needs this named export; keep the loader out of the component refresh check.
 // eslint-disable-next-line react-refresh/only-export-components
 export const dashboardLoader = () => {
-    return getNotes();
+  return getNotes();
 };
 
 function Dashboard() {
-    const notes = useLoaderData() as Note[];
+  const notes = useLoaderData() as Note[];
 
-    return (
-        <div>
-            <div>
-                {notes ? (
-                    notes.map((note) => (
-                        <Link key={note.id} to={"/"}>
-                            <h2>{note.title}</h2>
-                            <p>{note.content}</p>
-                        </Link>
-                    ))
-                ) : (
-                    <p>No notes available.</p>
-                )}
-            </div>
-        </div>
-    );
+  return (
+    <div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {notes ? (
+          notes.map((note) => (
+            <Link
+              key={note.id}
+              to={"/"}
+              className="block relative p-5 border border-zinc-200 dark:border-zinc-800 rounded-xl hover:shadow-md transition-shadow"
+            >
+              <h2 className="text-lg font-semibold mb-2">{note.title}</h2>
+              <p className=" text-zinc-500 dark:text-zinc-400 line-clamp-3">{note.content}</p>
+              <span className="absolute top-2 right-2 text-red-500 text-xl">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="1em"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <path
+                    fill="currentColor"
+                    d="M10 2.25a.75.75 0 0 0-.75.75v.75H5a.75.75 0 0 0 0 1.5h14a.75.75 0 0 0 0-1.5h-4.25V3a.75.75 0 0 0-.75-.75zm0 8.4a.75.75 0 0 1 .75.75v7a.75.75 0 0 1-1.5 0v-7a.75.75 0 0 1 .75-.75m4.75.75a.75.75 0 0 0-1.5 0v7a.75.75 0 0 0 1.5 0z"
+                  />
+                  <path
+                    fill="currentColor"
+                    fill-rule="evenodd"
+                    d="M5.991 7.917a.75.75 0 0 1 .746-.667h10.526a.75.75 0 0 1 .746.667l.2 1.802c.363 3.265.363 6.56 0 9.826l-.02.177a2.85 2.85 0 0 1-2.44 2.51a27 27 0 0 1-7.498 0a2.85 2.85 0 0 1-2.44-2.51l-.02-.177a44.5 44.5 0 0 1 0-9.826zm1.417.833l-.126 1.134a43 43 0 0 0 0 9.495l.02.177a1.35 1.35 0 0 0 1.157 1.191c2.35.329 4.733.329 7.082 0a1.35 1.35 0 0 0 1.157-1.19l.02-.178c.35-3.155.35-6.34 0-9.495l-.126-1.134z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </span>
+            </Link>
+          ))
+        ) : (
+          <p>No notes available.</p>
+        )}
+      </div>
+    </div>
+  );
 }
 
 export default Dashboard;
