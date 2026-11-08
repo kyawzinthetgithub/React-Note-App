@@ -1,6 +1,7 @@
 import { Link, useLoaderData } from "react-router";
 import { getNotes } from "../utils/storage";
 import type { Note } from "../types";
+import { useState } from "react";
 
 // The route needs this named export; keep the loader out of the component refresh check.
 // eslint-disable-next-line react-refresh/only-export-components
@@ -10,12 +11,22 @@ export const dashboardLoader = () => {
 
 function Dashboard() {
   const notes = useLoaderData() as Note[];
+  const [search,setSearch] = useState<string>('');
+
+  const filteredNotes = notes.filter((note) => note.title.toLocaleLowerCase().includes(search.toLocaleLowerCase()));
 
   return (
     <div>
+        <input 
+          type="text" 
+          className="w-full p-2 mb-4 border rounded-md dark:bg-zinc-900 dark:border-zinc-800 border-zinc-500 outline-none focus:border-zinc-700"
+          placeholder="Search Notes..." 
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {notes ? (
-          notes.map((note) => (
+        {filteredNotes ? (
+          filteredNotes.map((note) => (
             <Link
               key={note.id}
               to={"/"}
