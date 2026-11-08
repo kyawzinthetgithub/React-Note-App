@@ -1,4 +1,4 @@
-import { Link, Outlet } from 'react-router';
+import { Link, NavLink, Outlet } from 'react-router';
 import { useTheme } from '../context/ThemeContext';
 
 function Layout() {
@@ -10,7 +10,7 @@ function Layout() {
         <nav className="border-b border-zinc-200 dark:border-zinc-800 p-4 max-w-6xl mx-auto flex justify-between items-center">
           <Link to={"/"} className="text-xl font-bold tracking-tight">CardNotes.</Link>
           <div className="flex gap-4 items-center">
-            <Link to={"/new"} className="mx-4 cursor-pointer text-sm font-medium hover:text-blue-500">New Note</Link>
+            <NavLink to={"/create-note"} className={({isActive}) => isActive ? "text-blue-500" : "mx-4 cursor-pointer text-sm font-medium hover:text-blue-500"}>New Note</NavLink>
             <button onClick={toggleTheme} className="cursor-pointer text-sm p-1 bg-zinc-200 dark:bg-zinc-800 rounded-md hover:bg-zinc-300 dark:hover:bg-zinc-700 transition-colors duration-200">
               {theme === "light" ? "Dark" : "Light"} Mode
             </button>

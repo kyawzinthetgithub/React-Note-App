@@ -2,6 +2,7 @@ import { RouterProvider, createBrowserRouter } from "react-router";
 import { ThemeProvider } from './context/ThemeContext';
 import Layout from "./components/Layout";
 import Dashboard, { dashboardLoader } from "./pages/Dashboard";
+import CreateNote from "./pages/CreateNote";
 
 function App() {
 
@@ -14,6 +15,10 @@ function App() {
         path: "/",
         element: <Dashboard />,
         loader: dashboardLoader
+      },
+      {
+        path: '/create-note',
+        element: <CreateNote />
       }
     ],
   }

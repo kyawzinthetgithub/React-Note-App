@@ -2,6 +2,8 @@ import { Link, useLoaderData } from "react-router";
 import { getNotes } from "../utils/storage";
 import type { Note } from "../types";
 
+// The route needs this named export; keep the loader out of the component refresh check.
+// eslint-disable-next-line react-refresh/only-export-components
 export const dashboardLoader = () => {
     return getNotes();
 };
