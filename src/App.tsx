@@ -3,7 +3,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import Layout from "./components/Layout";
 import Dashboard, { dashboardLoader } from "./pages/Dashboard";
 import CreateNote, { createNoteAction } from "./pages/CreateNote";
-import DetailNote from "./pages/DetailNote";
+import DetailNote, { noteDetailLoader } from "./pages/DetailNote";
 
 function App() {
 
@@ -24,7 +24,8 @@ function App() {
       },
       {
         path:'/note/:id',
-        element: <DetailNote />
+        element: <DetailNote />,
+        loader: noteDetailLoader
       }
     ],
   }
