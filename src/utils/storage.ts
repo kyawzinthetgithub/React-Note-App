@@ -26,3 +26,12 @@ export const saveNote = (note: Omit<Note, 'id' | 'createdAt'>): Note => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify([...notes, newNote]));
     return newNote;
 };
+
+export const deleteNote = (id: string): void => {
+    const notes = getNotes();
+    const updatedNotes = notes.filter((note) => note.id !== id);
+    if (updatedNotes.length === notes.length) {
+        throw new Error(`Note with id ${id} not found`);
+    }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedNotes));
+}

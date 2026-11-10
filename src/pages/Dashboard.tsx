@@ -1,7 +1,8 @@
-import { Link, useLoaderData } from "react-router";
-import { getNotes } from "../utils/storage";
+import { Link, useLoaderData, useRevalidator } from "react-router";
+import { getNotes, deleteNote } from "../utils/storage";
 import type { Note } from "../types";
 import { useState } from "react";
+import ModalBox from "../components/ModalBox";
 
 // The route needs this named export; keep the loader out of the component refresh check.
 // eslint-disable-next-line react-refresh/only-export-components
@@ -11,30 +12,46 @@ export const dashboardLoader = () => {
 
 function Dashboard() {
   const notes = useLoaderData() as Note[];
-  const [search,setSearch] = useState<string>('');
+  const revalidator = useRevalidator();
+  const [search, setSearch] = useState<string>("");
 
-  const filteredNotes = notes.filter((note) => note.title.toLocaleLowerCase().includes(search.toLocaleLowerCase()));
+  const [noteToDeleteId, setNoteToDeleteId] = useState<string | null>(null);
+
+  const filteredNotes = notes.filter((note) =>
+    note.title.toLocaleLowerCase().includes(search.toLocaleLowerCase()),
+  );
+  const noteToDelete = notes.find((note) => note.id === noteToDeleteId);
+
+  const handleDeleteNote = (id: string) => {
+    deleteNote(id);
+    setNoteToDeleteId(null);
+    revalidator.revalidate();
+  };
 
   return (
     <div>
-        <input 
-          type="text" 
-          className="w-full p-2 mb-4 border rounded-md dark:bg-zinc-900 dark:border-zinc-800 border-zinc-500 outline-none focus:border-zinc-700"
-          placeholder="Search Notes..." 
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+      <input
+        type="text"
+        className="w-full p-2 mb-4 border rounded-md dark:bg-zinc-900 dark:border-zinc-800 border-zinc-500 outline-none focus:border-zinc-700"
+        placeholder="Search Notes..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {filteredNotes ? (
           filteredNotes.map((note) => (
-            <Link
-              key={note.id}
-              to={`/note/${note.id}`}
-              className="block relative p-5 border border-zinc-200 dark:border-zinc-800 rounded-xl hover:shadow-md transition-shadow"
-            >
-              <h2 className="text-lg font-semibold mb-2">{note.title}</h2>
-              <p className=" text-zinc-500 dark:text-zinc-400 line-clamp-3">{note.content}</p>
-              <span className="absolute top-2 right-2 text-red-500 text-xl">
+            <div key={note.id} className="block relative p-5 border border-zinc-200 dark:border-zinc-800 rounded-xl hover:shadow-md transition-shadow">
+              <Link key={note.id} to={`/note/${note.id}`}>
+                <h2 className="text-lg font-semibold mb-2">{note.title}</h2>
+                <p className=" text-zinc-500 dark:text-zinc-400 line-clamp-3">
+                  {note.content}
+                </p>
+              </Link>
+
+              <span
+                onClick={() => setNoteToDeleteId(note.id)}
+                className="absolute top-2 right-2 text-red-500 text-xl cursor-pointer"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="1em"
@@ -54,13 +71,37 @@ function Dashboard() {
                   />
                 </svg>
               </span>
-            </Link>
+
+            </div>
           ))
         ) : (
           <p>No notes available.</p>
         )}
         {filteredNotes.length === 0 && <p>No notes found.</p>}
       </div>
+      <ModalBox
+        isOpen={noteToDelete !== undefined}
+        onClose={() => setNoteToDeleteId(null)}
+        title="Delete Note"
+      >
+        <p className="text-gray-600 dark:text-gray-400">
+          Are you sure you want to delete this note?
+        </p>
+        <div className="flex justify-end space-x-2 mt-4">
+          <button
+            onClick={() => setNoteToDeleteId(null)}
+            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={() => noteToDelete && handleDeleteNote(noteToDelete.id)}
+            className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+          >
+            Delete
+          </button>
+        </div>
+      </ModalBox>
     </div>
   );
 }
